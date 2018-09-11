@@ -56,6 +56,29 @@
     this.detectQRCode = function(imageData, callback) {
       callback = callback || function() {};
 
+      imageDecoderWorker.postMessage(imageData);
+
+      imageDecoderWorker.onmessage = function(result){
+        //message object
+        var url = result.data;
+        if(url != undefined){
+          self.currentUrl = url;
+        }
+        callback(url);
+      };
+
+      imageDecoderWorker.onerror = function(error){
+        function WorkerException(message){
+          this.name = "WorkerException";
+          this.message = "message";
+        };
+        throw new WorkerException('Decoder Error');
+        callback(undefined);
+      };
+
+
+
+
       client.decode(imageData, function(result) {
         if(result !== undefined) {
           self.currentUrl = result;
