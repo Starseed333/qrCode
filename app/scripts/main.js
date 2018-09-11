@@ -48,6 +48,8 @@
 
     var client = new QRClient();
 
+    var imageDecoderWorker = new Worker('scripts/jsqrcode/qrworker.js');
+
     var self = this;
 
     this.currentUrl = undefined;
